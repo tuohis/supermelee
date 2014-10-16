@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>AS-0.1102 Project document</title>
+</head>
+
+<body>
+
+<div style="text-align: center;">
+<h3>AS-0.1102 - project document</h3>
+<h1>Subject <i>7</i> - <i>Super Melee!</i></h1>
+</div>
+
+<h3>Authors:</h3>
+
+<table>
+<tr>
+<td>53737F</td>
+<td>Mikko Tuohimaa</td>
+<td><a href="mailto:mikko.tuohimaa@tkk.fi">mikko.tuohimaa@tkk.fi</a></td>
+</tr>
+<tr>
+<td>63131R</td>
+<td>Jouko Kalmari</td>
+<td><a href="mailto:jkalmari@cc.hut.fi">jkalmari@cc.hut.fi</a></td>
+</tr>
+<tr>
+<td>60633E</td>
+<td>Mikko Romppainen</td>
+<td><a href="mailto:mromppai@cc.hut.fi">mromppai@cc.hut.fi</a></td>
+</tr>
+</table>
+
+<h3>Last updated: </h3>
+
+<p>06.12.2006</p>
+
+<h2>Instructions for compiling and use</h2>
+<div style="margin-left: 10px;">
+<h3>Installing the game</h3>
+<p>The software can be used both on Windows and Linux. Compiling and running the program needs SDL and OpenGL components to be installed on the computer, namely SDL, SDL_image and SDL_mixer. Also the computer's graphics card should support OpenGL, or else the game will run rather slowly.</p>
+<p>On a Linux machine the game can be compiled using make. After unpacking the tarball, go to the correct folder and use the command <b>make</b> in terminal.</p>
+
+<h3>The game in a nutshell</h3>
+<p>The essence of the game is a two-person head-to-head space battle, with each player controlling a space ship with ship type specific properties. When run, a menu is shown.
+<img src="graphics/menu.png" alt="Menu" width="320" /><br />
+After choosing the ships and clicking "Battle!", you're good to go and the fighting space is visible on the screen with each space ship in opposing corners.<br />
+<img src="graphics/game.png" alt="Game" width="320" /> </p>
+
+<h3>Controls</h3>
+<p>Ship 1 is controlled with the arrow keys: up for thrust, left and right for rotating. Right control key serves as fire key and right shift as special key.</p>
+<p>Ship 2 is controlled with keys E-S-F, where E is thrust and S and F rotate the ship. Fire key is Q and special key is 1.</p>
+<p>The Esc key is used for exiting the game to menu and quitting the program from menu.</p>
+
+<h3>Ships</h3>
+<p><img src="graphics/ship1_s.png" alt="Ship 1" />
+<b>Roundie</b> is a flying saucer with good maneuverability and a not-so-effective weaponry. It can escape tight spots by teleporting to a random location in space.</p>
+<p><img src="graphics/ship2_s.png" alt="Ship 2" />
+<b>Deathbird</b> is a larger, more heavy weight craft. It can be outmaneuvered by the other ships, but it is tough and has heavy weaponry. As a specialty it can fire self-guiding missiles.</p>
+<p><img src="graphics/ship3_s.png" alt="Ship 3" />
+<b>Drzzt</b> is an average in all aspects, except that as a special feature it can shoot massive bolts of plasma. These bolts are rather slow however, so be careful about not shooting them straight ahead in high speeds, or you get toasted yourself.</p>
+<p><img src="graphics/ship4_s.png" alt="Ship 4" />
+<b>Saturn</b> behaves much like Drzzt, except that instead of having a massive weapons bay, it has a sickbay. Therefore it can heal its crew, if enough energy is directed to life support.</p>
+<p>There are plans of other ships as well, but they are not included in the game due to time issues. These ships however could have special features like turbo boost, force field / shield, mine dropping ability and firing to multiple directions at once.</p>
+
+<h3>The playing space</h3>
+<p>The space is loopingly continuous, ie. if you go far enough in one direction, you end up in the opposite end of the game area. The game is equipped with dynamic zoom, so only the area needed to display both ships is shown on screen. It's worth to point out however, that since the space is continuous, the ships are shown so that the shortest path between them is visible. This causes some side effects, such as when on max zoom the crafts exceed screen boundaries, the ships seem to flip to the other sides of the screen. In reality, the display is just adjusted so that the shortest path between ships is shown.</p>
+<p>The space has some inanimate objects in it, namely planets and asteroids. Planets have a gravitational field, which pulls all objects towards them. Planets are indestructible, but asteroids can be destroyed either by shooting them or crashing them. Obviously in the latter case the ship takes damage as well.</p>
+
+<h3>Starting the game</h3>
+<p>After installation, run the executable either from terminal or a graphical interface. A menu pops up, with two rows of ships; the first row is player1's ship selection and the second row is player2's selection. Ships can be selected by clicking them with the mouse. From the top and bottom right corners can also be selected if a ship is controlled by a player or the computer. When done with the settings, click "BATTLE!" and you're good to go.</p>
+
+<h3>Playing the game</h3>
+<p>Using thruster, the special effect and firing all use battery. If the battery doesn't have enough charge, the abovementioned functions are not possible. Luckily the battery charges itself steadily, so periods of inoperability remain short.</p>
+
+<h3>Playing against the computer</h3>
+<p>You can play against the computer by clicking the "HUMAN" box in the main menu so that it says "CYBORG". The computers in the game universe aren't that sophisticated, so the ships generally do much better with a captain instead of the computer in charge. The cyborgs are adequate practice targets however. There isn't much else to say, except shoot to kill and have fun!</p>
+</div>
+
+<h2>Program architechture</h2>
+
+<p>The program is divided to classes as shown in the image below. The goal of using object-oriented program architecture is to keep the program structure understandable, extendable and portable.
+<br /><img src="graphics/c++_uml_doc.png" alt="Class diagram" style="margin: 5px;" /><br />
+SpaceObject was chopped into multiple derived classes, because the different objects are distinctly.. different. Especially their movement differs, so overloading the move() method in each class was a natural choice. As for the other classes in the program, they all have their specific function.</p>
+
+<div style="margin-left: 10px;">
+<h3><a href="doxygen/html/class_game.html">Game</a></h3>
+<p>Controls the game mechanics: initiates all the events and keeps the game cycle running. Game handles collisions, gravity etc. Game also takes care of start menu and game initialization.</p>
+
+<h3><a href="doxygen/html/class_screen.html">Screen</a></h3>
+<p>Game creates an instance of Screen at game startup. Screen handles visual output, ie. drawing the screen. Each frame Game calls Screen object's draw method.</p>
+
+<h3><a href="doxygen/html/class_input.html">Input</a></h3>
+<p>Game creates an instance of Input at startup as well. Input handles all user input from the keyboard.</p>
+
+<h3><a href="doxygen/html/class_a_i.html">AI</a></h3>
+<p>AI simulates an user by providing input signals for the Input object.</p>
+
+<h3><a href="doxygen/html/class_sound.html">Sound</a></h3>
+<p>Sound generates all music and sound effects. Game calls its methods when needed.</p>
+
+<h3><a href="doxygen/html/class_space_object.html">SpaceObject</a></h3>
+<p>SpaceObject is an abstract superclass for all the different objects in playing space. These include spacecrafts, ammo, asteroids and planets. Also Explosion class is derived from SpaceObject, so they would be easier to draw in Screen.</p>
+
+<div style="margin-left: 10px;">
+<h4><a href="doxygen/html/class_spacecraft.html">Spacecraft</a></h4>
+<p>Derived from SpaceObject, the Spacecraft class represents the ships the players command. Different crafts vary in properties, but use the same basic mechanics.</p>
+
+<h4><a href="doxygen/html/class_ammo.html">Ammo</a></h4>
+<p>Derived from SpaceObject, the Ammo class is used for all the objects that spacecrafts fire. They have a range, ie. self-destruct if not hit in a period of time.</p>
+
+<div style="margin-left: 10px;">
+<h5><a href="doxygen/html/class_missile.html">Missile</a></h5>
+<p>Derived from Ammo, the Missile class is for self-guiding, target-seeking ammo. Missiles have a very primitive guidance system.</p>
+</div>
+
+<h4><a href="doxygen/html/class_asteroid.html">Asteroid</a></h4>
+<p>Derived from SpaceObject, instances of class Asteroid are inanimate objects. They comply with the same physics all other SpaceObjects do, but have no means to control their movement. Asteroids rotate steadily for added visuality.</p>
+
+<h4><a href="doxygen/html/class_planet.html">Planet</a></h4>
+<p>Planets are static SpaceObjects. They generate a gravitation field around themselves.</p>
+
+<h4><a href="doxygen/html/class_explosion.html">Explosion</a></h4>
+<p>Explosions are derived from SpaceObjects to ease their drawing in Screen. An instance of Explosion is generated each time an object is destroyed violently. Thus, eg. when an Ammo object reaches its range and is removed from Game, no explosion is generated; but if a ship is destroyed, a massive "KABOOM!" is to be expected.</p>
+</div>
+
+<h3><a href="doxygen/html/class_space_vector.html">SpaceVector</a></h3>
+<p>SpaceVector is a class, a data structure, which represents a two-dimensional vector. The vector information is stored as x/y-components, and the class has methods to calculate several vectorial calculations. This class was created, because in the game much information, such as location, velocity, forces etc. are in vectorial form. To have the basic and some advanced methods available for their calculation has eased the program development dramatically.</p>
+</div>
+
+<h2>Data structures and algorithms</h2>
+
+<div style="margin-left: 10px;">
+<h3>Collision detection</h3>
+<p>Collisions are assumed to be fully elastic, so that kinetic energy and linear momentum are preserved. All objects are considered circular. From these facts exact equations can be derived (with Maple).</p>
+<p>All objects are checked in pairs. Two objects have been collided if distance of centers is smaller than the sum of their radii. When a collision is detected objects are first moved "back in time", so that they don't overlap. Then new speeds are calculated with the equations.<br/>
+<img src="graphics/collision.gif" alt="Collision" /></p>
+<p>This method could have problems if more than two objects collide with each other at the same frame, but that is a rare occasion.</p>
+
+<h3>Identifying SpaceObjects</h3>
+<p>In SpaceObject's subclasses the different types of ships, ammos etc. are identified by an id field the object has. Accordingly, eg. all constructors and Spacecraft::useSpecial() have a switch(id) in them to determine how the fields are to be initialized or what special feature is to be used, respectively. This could have been implemented with a method for each field, eg. in a constructor "mass = mass(id)", but with everything in the switch, the id is evaluated only once, and therefore it's a faster way of doing things.</p>
+</div>
+
+<h2>Known bugs</h2>
+
+<p>The SDL library leaks memory. It is an unfortunate fact which we can do nothing about.</p>
+<p>If both ships are destroyed in the same frame there may be some unexpected behaviour.</p>
+
+<h2>Tasks sharing and schedule</h2>
+
+<p>Working in a group went surprisingly well. Task sharing worked, and with Subversion in use it was easy to make slight adjustments even to the other members' code. Of course all modifications were discussed over in IRC or in meetings.</p>
+<p>The Subversion logs can be seen <a href="logfile.txt">here</a>.</p>
+
+<div style="margin-left: 10px;">
+<h3>The schedule</h3>
+<p>The project schedule was most affected by the deadline date. Since there was a deviation of nearly two weeks in the demo dates, we couldn't know in the beginning how much time we'd have. It was fortunate that we acquired a late date, so we could add more features to the game. Below are the highlights of the project and their approximate dates:</p>
+<ul>
+<li>14.11. Coding began</li>
+<li>20.11. Primitive program with ships flying in testing</li>
+<li>22.11. Collision detection done</li>
+<li>29.11. Sound and several ships done</li>
+<li>30.11.-6.12. Explosions, missiles, other features plus tweaking the existing ones</li>
+</ul>
+
+<h3>The Work</h3>
+<p>Each group member put tens of hours into the project. No one kept any score, but we all have a gut feeling of approximately 35 hours worth of development per group member, which totals to about 100 person-hours.</p>
+
+<p>The task sharing went well, especially because each member's workload was of the same magnitude. Thanks to the project plan, the integration of different modules was extremely painless. The task sharing had also a good logic behind it, since all members worked on a distinctly different kind of area. The project was a huge success, since the original deadlines were met and the game is actually really fun to play.</p>
+</div>
+
+<h2>Differences to the original plan</h2>
+
+<p>The biggest difference between the original plan and the actual outcome is the task sharing. Jouko wrote most of the graphics engine, ie. the Screen class instead of cooperative work on it, because we wanted to get a program core done as soon as possible. This so further testing and feature adding could be accomplished. A working program required Game, Screen, SpaceObject (and Spacecraft), SpaceVector and Input classes, so we all worked on our own territory; managing time so we could meet and all work with the Screen quickly enough wasn't worth the effort.</p>
+<p>The architectural difference is that the original Planetoid class was divided into two, Asteroid and Planet. This was because of the decision to keep planets static, immobile; that created such a difference between the objects that the decision was well-founded. Also the addition of an Explosion class was thought of after we had learned how the screen drawing functions.</p>
+
+<p>All in all, the project plan was well made and we made few modifications to the program structure. The plan gave a good reference frame to work with and made it easy to develop the software as a group.</p>
+
+<h2>Source code</h2>
+
+<p>Links to Makefile, the source files, as well as Doxygen documentation:</p>
+
+<ul>
+<li><a href="../Makefile">Makefile</a> - Makefile for compiling</li>
+<li><a href="../source/ai.cc">ai.cc</a> / <a href="doxygen/html/class_a_i.html">Documentation</a></li>
+<li><a href="../source/ai.hh">ai.hh</a> / <a href="doxygen/html/class_a_i.html">Documentation</a></li>
+<li><a href="../source/ammo.cc">ammo.cc</a> / <a href="doxygen/html/class_ammo.html">Documentation</a></li>
+<li><a href="../source/ammo.hh">ammo.hh</a> / <a href="doxygen/html/class_ammo.html">Documentation</a></li>
+<li><a href="../source/asteroid.cc">asteroid.cc</a> / <a href="doxygen/html/class_asteroid.html">Documentation</a></li>
+<li><a href="../source/asteroid.hh">asteroid.hh</a> / <a href="doxygen/html/class_asteroid.html">Documentation</a></li>
+<li><a href="../source/explosion.cc">explosion.cc</a> / <a href="doxygen/html/class_explosion.html">Documentation</a></li>
+<li><a href="../source/explosion.hh">explosion.hh</a> / <a href="doxygen/html/class_explosion.html">Documentation</a></li>
+<li><a href="../source/game.cc">game.cc</a> / <a href="doxygen/html/class_game.html">Documentation</a></li>
+<li><a href="../source/game.hh">game.hh</a> / <a href="doxygen/html/class_game.html">Documentation</a></li>
+<li><a href="../source/input.cc">input.cc</a> / <a href="doxygen/html/class_input.html">Documentation</a></li>
+<li><a href="../source/input.hh">input.hh</a> / <a href="doxygen/html/class_input.html">Documentation</a></li>
+<li><a href="../source/missile.cc">missile.cc</a> / <a href="doxygen/html/class_missile.html">Documentation</a></li>
+<li><a href="../source/missile.hh">missile.hh</a> / <a href="doxygen/html/class_missile.html">Documentation</a></li>
+<li><a href="../source/planet.cc">planet.cc</a> / <a href="doxygen/html/class_planet.html">Documentation</a></li>
+<li><a href="../source/planet.hh">planet.hh</a> / <a href="doxygen/html/class_planet.html">Documentation</a></li>
+<li><a href="../source/screen.cc">screen.cc</a> / <a href="doxygen/html/class_screen.html">Documentation</a></li>
+<li><a href="../source/screen.hh">screen.hh</a> / <a href="doxygen/html/class_screen.html">Documentation</a></li>
+<li><a href="../source/sound.cc">sound.cc</a> / <a href="doxygen/html/class_sound.html">Documentation</a></li>
+<li><a href="../source/sound.hh">sound.hh</a> / <a href="doxygen/html/class_sound.html">Documentation</a></li>
+<li><a href="../source/spacecraft.cc">spacecraft.cc</a> / <a href="doxygen/html/class_spacecraft.html">Documentation</a></li>
+<li><a href="../source/spacecraft.hh">spacecraft.hh</a> / <a href="doxygen/html/class_spacecraft.html">Documentation</a></li>
+<li><a href="../source/spaceobject.cc">spaceobject.cc</a> / <a href="doxygen/html/class_space_object.html">Documentation</a></li>
+<li><a href="../source/spaceobject.hh">spaceobject.hh</a> / <a href="doxygen/html/class_space_object.html">Documentation</a></li>
+<li><a href="../source/spacevector.cc">spacevector.cc</a> / <a href="doxygen/html/class_space_vector.html">Documentation</a></li>
+<li><a href="../source/spacevector.hh">spacevector.hh</a> / <a href="doxygen/html/class_space_vector.html">Documentation</a></li>
+<li><a href="logfile.txt">SVN logfile</a></li>
+</ul>
+
+<h2>References</h2>
+
+<p>The graphics are drawn and sound is played with <a href="http://www.libsdl.org/">SDL</a> and <a href="http://www.opengl.org/">OpenGL</a>.</p>
+<p>The game's foundation lies deep in the game <a href="http://en.wikipedia.org/wiki/Star_Control_II">Star Control II</a>, and an open source remake <a href="http://sc2.sourceforge.net/">Ur-Quan Masters</a>.</p>
+
+</body>
+</html>

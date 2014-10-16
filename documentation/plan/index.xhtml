@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//FI" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>AS-0.1102 Projektisuunnitelma</title>
+</head>
+
+<body>
+
+<div style="text-align: center;">
+<h3>AS-0.1102 - projektisuunnitelma</h3>
+<h1>Aihe <i>7</i> - <i>Super melee!</i></h1>
+</div>
+
+<h3>Tekijät:</h3>
+
+<table>
+<tr>
+<td>53737F</td>
+<td>Mikko Tuohimaa</td>
+<td><a href="mailto:mikko.tuohimaa@tkk.fi">mikko.tuohimaa@tkk.fi</a></td>
+</tr>
+<tr>
+<td>63131R</td>
+<td>Jouko Kalmari</td>
+<td><a href="mailto:jkalmari@cc.hut.fi">jkalmari@cc.hut.fi</a></td>
+</tr>
+<tr>
+<td>60633E</td>
+<td>Mikko Romppainen</td>
+<td><a href="mailto:mromppai@cc.hut.fi">mromppai@cc.hut.fi</a></td>
+</tr>
+</table>
+
+<h3>Viimeksi päivitetty: </h3>
+
+<p>13.11.2006</p>
+
+<h2>Vaatimusmäärittely</h2>
+
+<p>Projektin aiheena on Super Melee-avaruustaistelupeli. Pelissä kaksi alusta taistelee keskenään jatkuvassa avaruudessa. Pelin ominaisuuksiin kuuluu:</p>
+<ul>
+	<li>Graafinen käyttöliittymä</li>
+	<li>Kaksinpeli</li>
+	<li>Törmäykset</li>
+	<li>Useita erilaisia aluksia</li>
+</ul>
+
+
+<p>Lisäksi mahdollisia lisäominaisuuksia on toteuttamisjärjestyksessä:</p>
+<ul>
+	<li>Äänet</li>
+	<li>Asteroidit peliavaruudessa</li>
+	<li>Painovoimakentät</li>
+	<li>Lisää aluksia</li>
+	<li>Tekoäly</li>
+	<li>Laivastotaistelut</li>
+	<li>Asetusten ja/tai alustyyppien lataaminen ulkoisesta tiedostosta</li>
+	<li>Joystick-ohjaus</li>
+</ul>
+
+
+<h2>Ohjelman rakenne</h2>
+
+<p>Ohjelma on jaoteltu luokkiin:<br />
+<img src="c++_uml.png" alt="Luokkadiagrammi" style="margin: 5px;" />
+</p>
+
+<div style="padding-left: 10px;">
+<h3>Game</h3>
+<p>Pitää sisällään pelimekaniikan: se hallitsee pelitapahtumia ja pitää yllä tapahtumasykliä. Game käsittelee törmäykset, painovoiman ym. Game myös hoitaa alkuvalikon ja pelin alustuksen.</p>
+
+<h3>Screen</h3>
+<p>Olio huolehtii ruudun piirtämisestä OpenGL- ja SDL-rajapintojen kautta.</p>
+
+<h3>Input</h3>
+<p>Olio lukee ja käsittelee käyttäjän ohjauskäskyt näppäimistöltä tai muulta syöttölaitteelta ja lähettää käskyjä alusolioille.</p>
+
+<h3>AI</h3>
+<p>Tekoäly simuloi käyttäjää ja Input-luokan tavoin käskyttää alusoliota. Tekoälyä saatetaan myös käyttää ohjusten ohjauksessa.</p>
+
+<h3>Sound</h3>
+<p>Sound-luokka vastaa äänien (efektien, musiikin) soittamisesta. Mahdollisia äänien tiedostomuotoja ovat WAV ja Ogg Vorbis. Sound käyttää hyväkseen SDL-mixeriä.</p>
+
+<h3>SpaceObject</h3>
+<p>SpaceObject on abstrakti yläluokka kaikille pelialueella esiintyville olioille. Se sisältää tiedot olion sijainnista, nopeusvektorista, kiihtyvyysvektorista, asennosta, koosta (säde), massasta ja tekstuurista. Yhteisen yläluokan olemassaolo helpottaa mm. törmäysten tarkistamista, piirtämistä ja painovoiman mallintamista.</p>
+<p>Objektit suorittavat itsenäisesti liikkumisensa, ja niille annetaan tietoa niihin vaikuttavista voimista metodilla <b>addForce(SpaceVector F)</b>. Objektia käsketään liikkumaan metodilla <b>move(unsigned int timestep)</b>.</p>
+
+<div style="padding-left: 10px;">
+
+<h4>Spacecraft</h4>
+<p>Spacecraft on SpaceObjectin alaluokka, joka kuvaa pelaajan tai tekoälyn alusta. Sillä on kenttinä tiedot aluksen ominaisuuksista, kuten miehistön määrästä, aseistuksesta sekä kääntymis- ja maksiminopeudesta.</p>
+<p>Spacecraft-luokasta periytetään eri alustyyppejä, joilla on erilaiset erikoiskyvyt. Mahdollisia kykyjä ovat mm. kaukosiirtyminen, turbo, vahvempi ase, suojakenttä, itsetuho..</p>
+
+<h4>Ammo</h4>
+<p>Ammo on myös SpaceObjectin alaluokka, joka kuvaa alusten ampumia ammuksia. Ammukset voivat olla itseohjautuvia tai "tyhmiä", ja joko massallisia tai massattomia. Ammuksilla on kenttinä elinaika, joka vastaa käytännössä ammuksen kantamaa, sekä "damage", joka määrittää ammuksen alukselle aiheuttaman miehistönmenetyksen.</p>
+<p>Ammo-luokasta voidaan periyttää erillinen luokka SmartAmmo, joka kuvaa itseohjautuvaa ammusta.</p>
+
+<h4>Planetoid</h4>
+<p>Planetoid-luokka kuvaa pelialueen elottomia kappaleita, eli asteroideja ja planeettoja. Planeetoilla on painovoimakenttä, ovat liikkumattomia ja käytännössä tuhoutumattomia, kun taas asteroidit liikkuvat vallitsevien painovoimakenttien mukaan. Asteroidit voidaan tuhota.</p>
+
+</div>
+
+<h3>SpaceVector</h3>
+<p>Pelissä käsitellään paljon voima-, nopeus- ym. kaksiulotteisia vektoreita, joten on perusteltua tehdä niille oma luokkansa. Luokka sisältää x- ja y-suuntaiset komponentit, sekä metodit vektorien pistetuloa, yhteenlaskua ja vähennystä varten.</p>
+
+</div>
+<p>Mielestämme valittu ratkaisu on paras mahdollinen, verrattuna esimerkiksi siihen, että Game-olio suorittaisi kaikkien objektien liikkumiseen vaikuttavien voimien laskemisen.</p>
+
+
+
+<h2>Tehtävien jako</h2>
+
+<p>Projekti on jaettu osa-alueisiin, joilla jokaisella on nimetty vastuuhenkilö. Grafiikkamoottori (Screen) tehdään yhteistyönä, koska kukin ryhmän jäsenistä on kiinnostunut sen oppimisesta.</p>
+<ul>
+	<li>Mikko Romppainen: Input, Sound, AI</li>
+	<li>Jouko Kalmari: Game, grafiikat</li>
+	<li>Mikko Tuohimaa: SpaceObject ja sen aliluokat, SpaceVector</li>
+</ul>
+
+<p>Kaikki luokat liittyvät jollakin tavalla toisiinsa, joten ryhmän yhteistyö ja sisäinen kommunikaatio on ensiarvoisen tärkeää.</p>
+
+<h2>Ohjelman testaus</h2>
+
+<p>Ohjelman eri osia testataan itsenäisesti sopivilla testiohjelmilla, sekä osia yhdistäessä. Tavoitteena on päästä testaamaan eri luokkia yhdessä mahdollisimman aikaisessa vaiheessa. Lopputestaukset huipentuvat pelisessioon maarintalolla.</p>
+<p>Kriittinen vaihe projektissa on se, kun luokat Input, Game ja SpaceObject on saatu testaukseen.</p>
+
+<h2>Projektin aikataulu</h2>
+
+<p>Projektin koodaaminen aloitetaan välittömästi. Kriittisiä päivämääriä ovat:</p>
+<ul>
+	<li>20.11. luokat Input, Game, SpaceObject alaluokkineen sekä Screen testausvaiheessa</li>
+	<li>24.11.-5.12. kaikki luokat lopputestauksessa</li>
+	<li>26.11.-7.12. peli valmis; lähdekoodin ja dokumentaation palautus</li>
+	<li>27.11.-8.12. demosessio</li>
+</ul>
+<p>Viimeiset kaksi päivämäärää vaihtelevat sen mukaan, mihin kohtaan projektin demosessio varataan.
+</p>
+
+<h2>Referenssit</h2>
+
+<p>Referenssinä on käytetty Star Control II:n minipeliä nimeltään <a href="http://en.wikipedia.org/wiki/Star_Control">Super Melee!</a> ja sen pohjalta tehtyä avoimen koodin projektia <a href="http://sc2.sourceforge.net/">Ur-Quan Masters</a>. </p>
+<p>Projektissa käytetään grafiikan piirtämiseen ulkopuolisia kirjastoja, <a href="http://www.libsdl.org/">SDL:ää</a> ja <a href="http://www.opengl.org/">OpenGL:ää</a>, sekä äänen tuottamiseen SDL:ää.</p>
+
+</body>
+</html>
