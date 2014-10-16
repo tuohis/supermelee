@@ -15,7 +15,7 @@ EXEC = SuperMelee
 all: $(SRCS) $(EXEC)
 
 $(EXEC) : $(OBJS)
-	$(CC) $(LDFLAGS) $(OBJS) -o $@ 
+	$(CC) -o $@ $(OBJS) $(LDFLAGS)
 .cc.o:
 	$(CC) $(CFLAGS) $< -o $@
 
